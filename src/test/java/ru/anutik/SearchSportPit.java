@@ -12,7 +12,7 @@ import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 
-@DisplayName("Парметризованные тесты для поиска товаров в мазаине спортпита.")
+@DisplayName("Параметризованные тесты для поиска товаров в магазине спортпита.")
 public class SearchSportPit extends TestBase{
 
     @BeforeEach
@@ -25,7 +25,7 @@ public class SearchSportPit extends TestBase{
     })
     @ParameterizedTest(name = "Для поискового запроса {0} должен отдавать не пустой список карточек")
     @Tag("Critical")
-    void searchResultsSportPit(String searchQuery) {
+    void searchResultsSportPitTest(String searchQuery) {
         $("#mod_virtuemart_search").setValue(searchQuery).pressEnter();
         $$("[id = products-container] [class = spacer]")
                 .shouldBe(sizeGreaterThan(0));
@@ -37,7 +37,7 @@ public class SearchSportPit extends TestBase{
     })
     @ParameterizedTest(name = "Для поискового запроса {0} в первой карточке должен быть результат: {1}")
     @DisplayName("Проверка поиска первого поискового результата")
-    void siteShouldSearch(String searchQuery, String expectedLink) {
+    void siteShouldSearchTest(String searchQuery, String expectedLink) {
         $("#mod_virtuemart_search").setValue(searchQuery).pressEnter();
 
         $(".item-title a").shouldHave(text(expectedLink));
@@ -46,7 +46,7 @@ public class SearchSportPit extends TestBase{
     @CsvFileSource(resources = "/test_data/siteShouldSearchFromFile.csv")
     @ParameterizedTest(name = "Для поискового запроса {0} в первой карточке должен быть результат: {1}")
     @DisplayName("Проверка поиска первого поискового результата, когда поисковый данные хранятся в файле")
-    void siteShouldSearchFromFile(String searchQuery, String expectedLink) {
+    void siteShouldSearchFromFileTest(String searchQuery, String expectedLink) {
         $("#mod_virtuemart_search").setValue(searchQuery).pressEnter();
 
         $(".item-title a").shouldHave(text(expectedLink));
@@ -55,9 +55,10 @@ public class SearchSportPit extends TestBase{
     @EnumSource(Products.class)
     @ParameterizedTest(name = "Для поискового запроса {0} в первой карточке должен быть результат: {1}")
     @DisplayName("Проверка поискового результата с использованием enum")
-    void siteShouldSearchWithEnum(Products products) {
-        $("#mod_virtuemart_search").setValue(String.valueOf(products)).pressEnter();
-        $(".item-title a").shouldHave(text(String.valueOf(products)));
+    void siteShouldSearchWithEnumTest(Products products) {
+        String productDescription = products.getDescription();
+        $("#mod_virtuemart_search").setValue(productDescription).pressEnter();
+        $(".item-title a").shouldHave(text(productDescription));
     }
 
 
